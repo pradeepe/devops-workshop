@@ -30,6 +30,29 @@ resource "aws_subnet" "dpp-public-subnet-02" {
   }
 }
 
+resource "aws_internet_gateway" "dpp-igw" {
+  vpc_id     = aws_vpc.dpp-vpc.id
+
+  tags = {
+    Name = "dpp-igw"
+  }
+}
+
+
+resource "aws_route_table" "dpp-public-rt" {
+    vpc_id     = aws_vpc.dpp-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.dpp-igw.id
+  }
+
+  tags = {
+    Name = "dpp-public-rt"
+  }
+}
+
+
 resource "aws_instance" "demo-server" {
     ami = "ami-0eb5115914ccc4bc2"
     instance_type = "t2.micro"
