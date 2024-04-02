@@ -2,6 +2,14 @@ provider "aws" {
   region = "us-west-1"
 }
 
+resource "aws_vpc" "dpp-vpc" {
+  cidr_block       = "10.0.0.0/16"
+
+  tags = {
+    Name = "dpp-vpc"
+  }
+}
+
 resource "aws_instance" "demo-server" {
     ami = "ami-0eb5115914ccc4bc2"
     instance_type = "t2.micro"
