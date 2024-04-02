@@ -10,6 +10,16 @@ resource "aws_vpc" "dpp-vpc" {
   }
 }
 
+resource "aws_subnet" "dpp-public-subnet-01" {
+  vpc_id     = aws_vpc.dpp-vpc.id
+  cidr_block = "10.1.1.0/24"
+  map_customer_owned_ip_on_launch = "true"
+  availability_zone = "us-west-1a"
+  tags = {
+    Name = "dpp-public-subnet-01"
+  }
+}
+
 resource "aws_instance" "demo-server" {
     ami = "ami-0eb5115914ccc4bc2"
     instance_type = "t2.micro"
