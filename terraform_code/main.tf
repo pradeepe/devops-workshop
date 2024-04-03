@@ -1,9 +1,9 @@
 provider "aws" {
-  region = "us-west-1"
+  region = "us-west-2"
 }
 
 resource "aws_vpc" "dpp-vpc" {
-  cidr_block       = "10.0.0.0/16"
+  cidr_block       = "10.1.0.0/16"
 
   tags = {
     Name = "dpp-vpc"
@@ -14,7 +14,7 @@ resource "aws_subnet" "dpp-public-subnet-01" {
   vpc_id     = aws_vpc.dpp-vpc.id
   cidr_block = "10.1.1.0/24"
   map_public_ip_on_launch = "true"
-  availability_zone = "us-west-1a"
+  availability_zone = "us-west-2a"
   tags = {
     Name = "dpp-public-subnet-01"
   }
@@ -24,7 +24,7 @@ resource "aws_subnet" "dpp-public-subnet-02" {
   vpc_id     = aws_vpc.dpp-vpc.id
   cidr_block = "10.1.2.0/24"
   map_public_ip_on_launch = "true"
-  availability_zone = "us-west-1b"
+  availability_zone = "us-west-2b"
   tags = {
     Name = "dpp-public-subnet-02"
   }
@@ -45,10 +45,6 @@ resource "aws_route_table" "dpp-public-rt" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.dpp-igw.id
-  }
-
-  tags = {
-    Name = "dpp-public-rt"
   }
 }
 
