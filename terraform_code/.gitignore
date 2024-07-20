@@ -1,3 +1,5 @@
 ./target/*
 **/*.tfstate
 **/.terraform/*
+**/.terraform.*
+**/terraform.*
