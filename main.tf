@@ -84,3 +84,26 @@ resource "aws_instance" "ansible_instance" {
   # Add an EIP to the instance
   associate_public_ip_address = true
 }
+
+resource "aws_security_group" "ansible_sg" {
+  name        = "ansible_sg"
+  description = "Allow SSH inbound traffic"
+
+  tags = {
+    Name = "Ansiansible-sg-SSH"
+  }
+ 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+ 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
