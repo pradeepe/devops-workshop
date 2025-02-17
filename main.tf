@@ -35,3 +35,11 @@ resource "aws_internet_gateway" "dpp-igw" {
     Name = "dpp-igw"
   } 
 }
+
+resource "aws_route_table" "dpp-pub-rt" {
+  vpc_id = aws_vpc.dpp-vpc.id 
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.dpp-igw.id 
+  }
+}
