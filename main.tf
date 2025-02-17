@@ -28,3 +28,10 @@ resource "aws_subnet" "dpp-pub-subnet-02" {
     Name = "dpp-public-subent-02"
   }
 }
+
+resource "aws_internet_gateway" "dpp-igw" {
+  vpc_id = aws_vpc.dpp-vpc.id 
+  tags = {
+    Name = "dpp-igw"
+  } 
+}
