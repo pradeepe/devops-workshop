@@ -107,3 +107,8 @@ resource "aws_security_group" "ansible_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+output "instance_public_ip" {
+  description = "The public IP of the EC2 instance"
+  value       = aws_instance.ansible_instance.public_ip
+}
