@@ -74,7 +74,7 @@ resource "aws_instance" "demo-server" {
   associate_public_ip_address = true
 }
 
-resource "aws_security_group" "demo_sg" {
+resource "aws_security_group" "demo-sg" {
   name        = "demo_sg"
   description = "Allow SSH inbound traffic"
   vpc_id = aws_vpc.dpp-vpc.id
@@ -98,9 +98,4 @@ resource "aws_security_group" "demo_sg" {
     cidr_blocks = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
-}
-
-output "instance_public_ip" {
-  description = "The public IP of the EC2 instance"
-  value       = aws_instance.demo-server.public_ip
 }
