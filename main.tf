@@ -53,3 +53,34 @@ resource "aws_route_table_association" "dpp-rta-pub-subnet-02" {
   subnet_id = aws_subnet.dpp-pub-subnet-02.id 
   route_table_id = aws_route_table.dpp-pub-rt.id   
 }
+
+resource "aws_instance" "ansible_instance" {
+  ami           = "ami-0427090fd1714168b" # Replace it with the AMI ID for your region ami-0427090fd1714168b for AWS Linux ami-04a81a99f5ec58529
+  instance_type = "t2.micro" 
+  key_name = "dpp" # Replace with your key pair name
+ 
+  tags = {
+    Name = "DevOps-Ansible"
+  }
+
+    user_data = <<-EOF
+              #!/bin/bash
+              # Update the system
+              yum update -y
+ 
+              # Install required packages
+              yum install -y python3 python3-pip
+ 
+              # Install Ansible
+              pip3 install ansible
+ 
+              # Verify Ansible installation
+              ansible --version
+              EOF
+
+  # Security group allowing SSH access
+  vpc_security_group_ids = [aws_security_group.ansible_sg.id]
+ 
+  # Add an EIP to the instance
+  associate_public_ip_address = true
+}
