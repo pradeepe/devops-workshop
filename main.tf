@@ -9,7 +9,7 @@ resource "aws_vpc" "dpp-vpc" {
   }
 }
 
-resource "aws_subnet" "dpp-pub-subnet-01" {
+resource "aws_subnet" "dpp-public-subnet-01" {
   vpc_id = aws_vpc.dpp-vpc.id
   cidr_block = "10.1.1.0/24"
   map_public_ip_on_launch = "true"
@@ -19,7 +19,7 @@ resource "aws_subnet" "dpp-pub-subnet-01" {
   }
 }
 
-resource "aws_subnet" "dpp-pub-subnet-02" {
+resource "aws_subnet" "dpp-public-subnet-02" {
   vpc_id = aws_vpc.dpp-vpc.id
   cidr_block = "10.1.2.0/24"
   map_public_ip_on_launch = "true"
@@ -36,7 +36,7 @@ resource "aws_internet_gateway" "dpp-igw" {
   } 
 }
 
-resource "aws_route_table" "dpp-pub-rt" {
+resource "aws_route_table" "dpp-public-rt" {
   vpc_id = aws_vpc.dpp-vpc.id 
   route {
     cidr_block = "0.0.0.0/0"
@@ -44,53 +44,41 @@ resource "aws_route_table" "dpp-pub-rt" {
   }
 }
 
-resource "aws_route_table_association" "dpp-rta-pub-subnet-01" {
-  subnet_id = aws_subnet.dpp-pub-subnet-01.id
-  route_table_id = aws_route_table.dpp-pub-rt.id   
+resource "aws_route_table_association" "dpp-rta-public-subnet-01" {
+  subnet_id = aws_subnet.dpp-public-subnet-01.id
+  route_table_id = aws_route_table.dpp-public-rt.id   
 }
 
-resource "aws_route_table_association" "dpp-rta-pub-subnet-02" {
-  subnet_id = aws_subnet.dpp-pub-subnet-02.id 
-  route_table_id = aws_route_table.dpp-pub-rt.id   
+resource "aws_route_table_association" "dpp-rta-public-subnet-02" {
+  subnet_id = aws_subnet.dpp-public-subnet-02.id 
+  route_table_id = aws_route_table.dpp-public-rt.id   
 }
 
-resource "aws_instance" "ansible_instance" {
-  ami           = "ami-0427090fd1714168b" # Replace it with the AMI ID for your region ami-0427090fd1714168b for AWS Linux ami-04a81a99f5ec58529
+resource "aws_instance" "demo-server" {
+# Replace it with the AMI ID for your region ami-0427090fd1714168b for AWS Linux ami-04a81a99f5ec58529
+  ami           = "ami-053b0d53c279acc90" 
   instance_type = "t2.micro" 
   key_name = "dpp" # Replace with your key pair name
- 
+ //security_groups = [ "demo-sg" ]
+  
   tags = {
-    Name = "DevOps-Ansible"
+    Name = "DevOps-demo"
   }
 
-    user_data = <<-EOF
-              #!/bin/bash
-              # Update the system
-              yum update -y
- 
-              # Install required packages
-              yum install -y python3 python3-pip
- 
-              # Install Ansible
-              pip3 install ansible
- 
-              # Verify Ansible installation
-              ansible --version
-              EOF
-
   # Security group allowing SSH access
-  vpc_security_group_ids = [aws_security_group.ansible_sg.id]
+  # vpc_security_group_ids = [aws_security_group.demo_sg]
  
   # Add an EIP to the instance
   associate_public_ip_address = true
 }
 
-resource "aws_security_group" "ansible_sg" {
-  name        = "ansible_sg"
+resource "aws_security_group" "demo_sg" {
+  name        = "demo_sg"
   description = "Allow SSH inbound traffic"
+  vpc_id = aws_vpc.dpp-vpc.id
 
   tags = {
-    Name = "Ansiansible-sg-SSH"
+    Name = "demo-sg-SSH"
   }
  
   ingress {
@@ -112,5 +100,5 @@ resource "aws_security_group" "ansible_sg" {
 
 output "instance_public_ip" {
   description = "The public IP of the EC2 instance"
-  value       = aws_instance.ansible_instance.public_ip
+  value       = aws_instance.demo-server.public_ip
 }
