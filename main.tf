@@ -43,3 +43,13 @@ resource "aws_route_table" "dpp-pub-rt" {
     gateway_id = aws_internet_gateway.dpp-igw.id 
   }
 }
+
+resource "aws_route_table_association" "dpp-rta-pub-subnet-01" {
+  subnet_id = aws_subnet.dpp-pub-subnet-01.id
+  route_table_id = aws_route_table.dpp-pub-rt.id   
+}
+
+resource "aws_route_table_association" "dpp-rta-pub-subnet-02" {
+  subnet_id = aws_subnet.dpp-pub-subnet-02.id 
+  route_table_id = aws_route_table.dpp-pub-rt.id   
+}
