@@ -75,12 +75,12 @@ resource "aws_instance" "ansible-server" {
  
               # Install required packages
               # yum install -y python3 python3-pip
-              sudo apt install software-properties-common
+              sudo apt install -y software-properties-common
  
               # Install Ansible
               # pip3 install ansible
               sudo add-apt-repository --yes --update ppa:ansible/ansible
-              sudo apt install ansible
+              sudo apt install -y ansible
  
               # Verify Ansible installation
               ansible --version
